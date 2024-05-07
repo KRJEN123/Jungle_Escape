@@ -6,13 +6,11 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
+
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageView;
+
 import android.os.Handler;
-import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,12 +20,15 @@ import java.util.TimerTask;
 
 public class Game extends AppCompatActivity {
    private float height;
+
+
    private float x;
    private float y;
 
 
     private GameView gameView;
     private List<platform> platforms;
+
     private boolean falling;
 
     private boolean onPlatform=false;
@@ -50,21 +51,31 @@ public class Game extends AppCompatActivity {
         wm.getDefaultDisplay().getMetrics(metrics);
         height = metrics.heightPixels;
         platforms = new ArrayList<>();
-        platforms.add(new platform(100, 600, 300, 40));  // x, y, width, height
-        platforms.add(new platform(500, 800, 400, 40));
-        platforms.add(new platform(1400,700,400,40));
+        platforms.add(new platform(100, 500, 300, 50));  // x, y, width, height
+        platforms.add(new platform(500, 800, 400, 50));
+        platforms.add(new platform(1400,600,400,60));
+        platforms.add(new platform(700,500,150,50));
         gameView.setPlatforms(platforms);
-        character character=new character(200,200,0,(height-200));
+        character character=new character(150,80,0,(height-150));
         falling=character.getFalling();
         gameView.setCharacter(character);
+       Enemy enemy=new Enemy(920,(height-150),150,80,920,(height-150));
+
+
+
+
+
         Handler mHandler=new Handler();
+
+
+
         Runnable r=new Runnable() {
             @Override
             public void run() {
                 x=character.getX();
-                character.setX(x-5);
-                gameView.invalidate();
-                mHandler.postDelayed(this,5);
+                character.setX(x-15);
+
+                mHandler.postDelayed(this,20);
 
             }
         };
@@ -73,9 +84,12 @@ public class Game extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 switch(event.getAction()){
                     case MotionEvent.ACTION_DOWN:
+                        gameView.setCharacterDir(1);
+                        gameView.startLeftAnimation();
                         mHandler.post(r);
                         break;
                     case MotionEvent.ACTION_UP:
+                        gameView.stopLeftAnimation();
                         mHandler.removeCallbacks(r);
                         break;
 
@@ -94,9 +108,9 @@ public class Game extends AppCompatActivity {
             @Override
             public void run() {
                 x=character.getX();
-                character.setX(x+5);
+                character.setX(x+15);
                 gameView.invalidate();
-                mHandler.postDelayed(this,5);
+                mHandler.postDelayed(this,20);
             }
         };
         right.setOnTouchListener(new View.OnTouchListener() {
@@ -104,9 +118,13 @@ public class Game extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 switch(event.getAction()){
                     case MotionEvent.ACTION_DOWN:
+
+                       gameView.setCharacterDir(2);
+                       gameView.startRightAnimation();
                         mHandler.post(r1);
                         break;
                     case MotionEvent.ACTION_UP:
+                        gameView.stopRightAnimation();
                         mHandler.removeCallbacks(r1);
                         break;
                 }
@@ -159,7 +177,7 @@ public class Game extends AppCompatActivity {
 
 
 
-                }else {
+                } else {
 
                         character.setY(newY);  // Otherwise, continue falling
                         onPlatform=false;
