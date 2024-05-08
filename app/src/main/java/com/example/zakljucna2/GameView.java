@@ -1,19 +1,22 @@
 package com.example.zakljucna2;
-
 import android.content.Context;
+import android.graphics.Canvas;
+import android.util.AttributeSet;
+import android.view.View;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Handler;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
-
 import java.util.Arrays;
 import java.util.List;
+
+
+
+
+
+
+
 
 public class GameView extends View {
 
@@ -106,6 +109,7 @@ public class GameView extends View {
         }
     };
 
+
     public void setPlatforms(List<platform> platforms) {
         this.platforms = platforms;
     }
@@ -118,9 +122,11 @@ public class GameView extends View {
 
     }
 
+
     public void setCharacter(character character) {
         this.character = character;
     }
+
 
 
 
@@ -128,9 +134,7 @@ public class GameView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-
-
-       if (platformSheet != null && platforms != null) {
+        if (platformSheet != null && platforms != null) {
             for (platform platform : platforms) {
 
                 Rect sourceRect = new Rect(417, 552,912 ,680  );
@@ -167,10 +171,13 @@ public class GameView extends View {
             canvas.drawBitmap(spriteSheet, sourceRect, destRect, null);
         }
 
-            // Define the destination rectangle where the sprite should be drawn
+        // Define the destination rectangle where the sprite should be drawn
 
 
 
-        }
     }
+}
+
+        // Draw platforms
+
 
