@@ -28,13 +28,17 @@
         android:padding="16dp"
         tools:ignore="MissingConstraints">
 
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:id="@+id/Title"
-    android:text="AAAAAAAAAAAA"
+        <TextView
+            android:id="@+id/textViewOutline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="JUNGLE ESCAPE"
+            android:textColor="#151515"
+            android:textSize="50sp"
+            android:fontFamily="@font/font"
 
-    />
+
+            />
 
         <ImageView
             android:id="@+id/start"

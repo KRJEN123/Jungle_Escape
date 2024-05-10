@@ -39,7 +39,7 @@ public class GameView extends View {
         options.inScaled = false;
         spriteSheet = BitmapFactory.decodeResource(context.getResources(), R.drawable.motw, options);
         enemySpriteSheet = BitmapFactory.decodeResource(context.getResources(), R.drawable.motw, options);
-        platformSheet = BitmapFactory.decodeResource(context.getResources(), R.drawable.platform, options);
+        platformSheet = BitmapFactory.decodeResource(context.getResources(), R.drawable.ggwp1, options);
         Log.d("GameView", "Sprite Sheet Size: " + spriteSheet.getWidth() + "x" + spriteSheet.getHeight());
 
         leftAnimationFrames = Arrays.asList(
@@ -241,7 +241,7 @@ public class GameView extends View {
         // Draw platforms
         if (platformSheet != null && platforms != null) {
             for (platform platform : platforms) {
-                Rect sourceRect = new Rect(417, 552, 912, 680);
+                Rect sourceRect = new Rect(20, 25, 405, 113);
 
                 Rect destRect = new Rect(
                         (int) platform.getX(),
