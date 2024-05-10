@@ -32,32 +32,39 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-        <Button
+        <ImageView
             android:id="@+id/left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="50dp"
             android:layout_toStartOf="@id/right"
-            android:text="Left"/>
+            android:src="@drawable/left1"
 
-        <Button
+
+            />
+
+        <ImageView
             android:id="@+id/right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginBottom="50dp"
             android:layout_alignParentBottom="true"
-            android:text="Right"/>
+            android:text="Right"
+            android:src="@drawable/right1"
+            />
 
-        <Button
+        <ImageView
             android:id="@+id/jump"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="30dp"
-            android:layout_marginBottom="50dp"
-            android:text="Jump"/>
+            android:layout_marginBottom="40dp"
+            android:text="Jump"
+            android:src="@drawable/jump1"
+            />
 
     </RelativeLayout>
 

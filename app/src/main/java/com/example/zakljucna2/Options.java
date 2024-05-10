@@ -2,24 +2,67 @@ package com.example.zakljucna2;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowInsetsController;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 public class Options extends AppCompatActivity {
-
+    private boolean isSoundOn = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
        enableFullscreenWithCutout();
         setContentView(R.layout.activity_options);
+        ImageView soundButton = findViewById(R.id.sound);
+        ImageView back=findViewById(R.id.back);
+        int desiredWidth = 500;
+        int desiredHeight = 500;
+       int backWidth=250;
+       int backHeight=250;
+
+        ViewGroup.LayoutParams layoutParams2 = soundButton.getLayoutParams();
+        ViewGroup.LayoutParams layoutParams1 = back.getLayoutParams();
+        layoutParams2.width=desiredWidth;
+        layoutParams2.height=desiredHeight;
+        layoutParams1.width=backWidth;
+        layoutParams1.height=backHeight;
+        soundButton.setLayoutParams(layoutParams2);
+        back.setLayoutParams(layoutParams1);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Options.this, MainActivity.class);
+                startActivity(intent);
 
 
+            }
+        });
 
+        soundButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleSoundButton(soundButton);
+            }
+        });
+
+
+    }
+    private void toggleSoundButton(ImageView soundButton) {
+        if (isSoundOn) {
+            soundButton.setImageResource(R.drawable.soundoff);
+            isSoundOn = false;
+        } else {
+            soundButton.setImageResource(R.drawable.soundon);
+            isSoundOn = true;
+        }
     }
     private void enableFullscreenWithCutout() {
         Window window = getWindow();

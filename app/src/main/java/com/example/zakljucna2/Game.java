@@ -7,6 +7,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowInsetsController;
@@ -14,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import android.os.Handler;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -41,10 +43,23 @@ public class Game extends AppCompatActivity {
         enableFullscreenWithCutout();
         setContentView(R.layout.activity_game);
         gameView = findViewById(R.id.game_view);
-
-        Button left = findViewById(R.id.left);
-        Button right = findViewById(R.id.right);
-        Button space = findViewById(R.id.jump);
+        int desiredWidth = 230;
+        int desiredHeight = 230;
+        ImageView left = findViewById(R.id.left);
+        ImageView right = findViewById(R.id.right);
+        ImageView space = findViewById(R.id.jump);
+        ViewGroup.LayoutParams layoutParams2 = left.getLayoutParams();
+        ViewGroup.LayoutParams layoutParams = space.getLayoutParams();
+        ViewGroup.LayoutParams layoutParams1 = right.getLayoutParams();
+        layoutParams.width=desiredWidth;
+        layoutParams.height=desiredHeight;
+        layoutParams2.width=desiredWidth;
+        layoutParams2.height=desiredHeight;
+        layoutParams1.width=desiredWidth;
+        layoutParams1.height=desiredHeight;
+        left.setLayoutParams(layoutParams2);
+        space.setLayoutParams(layoutParams);
+        right.setLayoutParams(layoutParams1);
         WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics metrics = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(metrics);
