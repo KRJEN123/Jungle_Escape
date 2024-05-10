@@ -6,43 +6,53 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <RelativeLayout
+    <!-- Full-Screen Background Image -->
+    <ImageView
+        android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        tools:ignore="ExtraText"
+        android:src="@drawable/summer"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-        >
+    <!-- Container for Buttons (ImageViews) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="16dp"
+        tools:ignore="MissingConstraints">
 
-        <Button
+        <ImageView
             android:id="@+id/start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="Start Button"
+            android:scaleType="fitCenter"
+            android:src="@drawable/gg"
+            android:layout_marginBottom="16dp"/>
 
-            android:layout_centerInParent="true"
-            android:text="START" />
-
-        <Button
+        <ImageView
             android:id="@+id/options"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/start"
+            android:contentDescription="Options Button"
+            android:scaleType="fitCenter"
+            android:src="@drawable/options1"
+            android:layout_marginBottom="16dp"/>
 
-
-            android:layout_centerInParent="true"
-            android:text="OPTIONS" />
-
-        <Button
+        <ImageView
             android:id="@+id/exit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/options"
+            android:contentDescription="Exit Button"
+            android:scaleType="fitCenter"
+            android:src="@drawable/exit1"/>
 
-
-            android:layout_centerInParent="true"
-            android:text="EXIT" />
-
-    </RelativeLayout>
-
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

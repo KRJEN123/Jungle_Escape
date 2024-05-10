@@ -1,81 +1,26 @@
 package com.example.zakljucna2;
 
 import androidx.appcompat.app.AppCompatActivity;
-import android.content.Intent;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.os.Bundle;
-import android.view.View;
 import android.view.Window;
+import android.view.WindowInsets;
 import android.view.WindowInsetsController;
 import android.view.WindowManager;
-import android.view.WindowInsets;
-import androidx.appcompat.app.AppCompatActivity;
-public class MainActivity extends AppCompatActivity {
+
+public class Options extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
        enableFullscreenWithCutout();
-
-        setContentView(R.layout.activity_main);
-        ImageView start=findViewById(R.id.start);
-        ImageView options=findViewById(R.id.options);
-        ImageView exit=findViewById(R.id.exit);
-
-        // Set desired width and height in pixels
-        int desiredWidth = 500; // in pixels
-        int desiredHeight = 150; // in pixels
-
-        // Create new LayoutParams and set them
-        ViewGroup.LayoutParams layoutParams2 = exit.getLayoutParams();
-        ViewGroup.LayoutParams layoutParams1 = options.getLayoutParams();
-        ViewGroup.LayoutParams layoutParams = start.getLayoutParams();
-       layoutParams2.width=desiredWidth;
-       layoutParams2.height=desiredHeight;
-        layoutParams1.width=desiredWidth;
-       layoutParams1.height=desiredHeight;
-        layoutParams.width = desiredWidth;
-        layoutParams.height = desiredHeight;
-
-        // Apply the new LayoutParams to the ImageButton
-        start.setLayoutParams(layoutParams);
-        options.setLayoutParams(layoutParams1);
-        exit.setLayoutParams(layoutParams2);
-
-    start.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(MainActivity.this, Game.class);
-            startActivity(intent);
-        }
-    });
-    options.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent intent=new Intent(MainActivity.this, Options.class);
-            startActivity(intent);
-
-        }
-    });
-    exit.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            finishAffinity(); // Close all activities
-            System.exit(0); // E
-        }
-    });
+        setContentView(R.layout.activity_options);
 
 
 
     }
-
     private void enableFullscreenWithCutout() {
         Window window = getWindow();
 

@@ -8,33 +8,20 @@
 
     <RelativeLayout
         android:id="@+id/screen"
-
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
+        android:fitsSystemWindows="false">
 
-        >
-
-
-
-
-
-
-
-
-    <ImageView
-        android:id="@+id/background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        <ImageView
+            android:id="@+id/background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
         android:src="@drawable/background"
-        android:scaleType="centerCrop"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-
-
-       />
+        app:layout_constraintEnd_toEndOf="parent"/>
 
         <com.example.zakljucna2.GameView
             android:id="@+id/game_view"
@@ -45,9 +32,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-
-
-
         <Button
             android:id="@+id/left"
             android:layout_width="wrap_content"
@@ -55,12 +39,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="50dp"
             android:layout_toStartOf="@id/right"
-            android:text="Left"
-
-        >
-
-
-        </Button>
+            android:text="Left"/>
 
         <Button
             android:id="@+id/right"
@@ -69,25 +48,17 @@
             android:layout_alignParentEnd="true"
             android:layout_marginBottom="50dp"
             android:layout_alignParentBottom="true"
-        android:text="Right"
-            >
-
-        </Button>
+            android:text="Right"/>
 
         <Button
             android:id="@+id/jump"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:layout_alignParentBottom="true"
             android:layout_marginStart="30dp"
             android:layout_marginBottom="50dp"
-            android:text="jump">
-
-        </Button>
-
+            android:text="Jump"/>
 
     </RelativeLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
