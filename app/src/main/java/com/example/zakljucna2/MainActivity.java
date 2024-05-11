@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -18,11 +19,16 @@ import android.view.WindowManager;
 import android.view.WindowInsets;
 import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
+    Sound sound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
        enableFullscreenWithCutout();
+       sound = new Sound(this, R.raw.menumusic);
+
+
+
 
         setContentView(R.layout.activity_main);
         ImageView start=findViewById(R.id.start);
@@ -54,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             Intent intent = new Intent(MainActivity.this, Game.class);
             startActivity(intent);
+            sound.pauseMusic();
         }
     });
     options.setOnClickListener(new View.OnClickListener() {
@@ -61,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             Intent intent=new Intent(MainActivity.this, Options.class);
             startActivity(intent);
+            sound.pauseMusic();
 
         }
     });
@@ -69,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             finishAffinity(); // Close all activities
             System.exit(0); // E
+
         }
     });
 

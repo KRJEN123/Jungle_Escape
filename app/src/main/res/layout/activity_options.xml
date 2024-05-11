@@ -38,6 +38,8 @@
             android:src="@drawable/soundon"
             android:contentDescription="Sound Button"
             android:layout_marginBottom="16dp"/>
+
+
     </LinearLayout>
 
     <!-- Back Button (Bottom-Left Corner) -->

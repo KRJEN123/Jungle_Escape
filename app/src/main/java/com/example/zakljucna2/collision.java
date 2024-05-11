@@ -115,7 +115,29 @@ public class collision {
         }
         return -1;  // No collision from the specified side
     }
+    public static boolean characterCollisionWithEnemy(character character, List<Enemy> enemies) {
+        for (Enemy enemy : enemies) {
+            if (character.getX() + character.getWidth() > enemy.getX() &&
+                    character.getX() < enemy.getX() + enemy.getWidth() &&
+                    character.getY() + character.getHeight() > enemy.getY() &&
+                    character.getY() < enemy.getY() + enemy.getHeight()) {
+                // Collision with an enemy detected
+                return true;
+            }
+        }
+        return false; // No collision with any enemy
+    }
 
-    // Other existing methods...
+   public static boolean characterCollisionWithCoin(character character,coin coin){
+        if(character.getX()+character.getWidth()>coin.getX() &&
+        character.getX()<coin.getX()+coin.getWidth() &&
+        character.getY()+character.getHeight()>coin.getY()&&
+        character.getY()<coin.getY()+coin.getHeight()
+        ){
+            return true;
+
+        }
+        return false;
+   }
 }
 

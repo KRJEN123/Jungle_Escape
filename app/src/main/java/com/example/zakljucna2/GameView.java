@@ -17,12 +17,13 @@ public class GameView extends View {
     private Bitmap spriteSheet;
     private Bitmap enemySpriteSheet;
     private Bitmap platformSheet;
+    private  Bitmap coinSheet;
     private int characterDir = 1; // 1 = Right, 0 = Left
     private List<platform> platforms;
     private character character;
     private List<Enemy> enemies = new ArrayList<>();
     private int currentFrame = 0;
-
+    coin coin;
     private List<Rect> leftAnimationFrames;
     private List<Rect> rightAnimationFrames;
 
@@ -40,6 +41,7 @@ public class GameView extends View {
         spriteSheet = BitmapFactory.decodeResource(context.getResources(), R.drawable.motw, options);
         enemySpriteSheet = BitmapFactory.decodeResource(context.getResources(), R.drawable.motw, options);
         platformSheet = BitmapFactory.decodeResource(context.getResources(), R.drawable.ggwp1, options);
+        coinSheet=BitmapFactory.decodeResource(context.getResources(), R.drawable.coin, options);
         Log.d("GameView", "Sprite Sheet Size: " + spriteSheet.getWidth() + "x" + spriteSheet.getHeight());
 
         leftAnimationFrames = Arrays.asList(
@@ -183,6 +185,8 @@ public class GameView extends View {
         this.enemies = enemies;
     }
 
+    public void setCoin(coin coin){this.coin=coin;}
+
     public void updateAllEnemies() {
         for (Enemy enemy : enemies) {
             updateEnemyPos(enemy);
@@ -252,6 +256,18 @@ public class GameView extends View {
 
                 canvas.drawBitmap(platformSheet, sourceRect, destRect, null);
             }
+        }
+
+        if(coin !=null && coinSheet!=null){
+            Rect sourceRect= new Rect(90,90,465,480);
+            Rect desRect=new Rect(
+                    (int) coin.getX(),
+                    (int)coin.getY(),
+                    (int)(coin.getX()+coin.getWidth()),
+                    (int)(coin.getY()+coin.getHeight())
+                    );
+            canvas.drawBitmap(coinSheet, sourceRect, desRect, null);
+
         }
 
         // Draw the character

@@ -1,6 +1,7 @@
 package com.example.zakljucna2;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -41,6 +42,7 @@ public class Game extends AppCompatActivity {
     private boolean falling;
     private boolean jumping;
     private boolean onPlatform = true;
+    coin coin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +78,7 @@ public class Game extends AppCompatActivity {
         platforms.add(new platform(1100,700,100,50));
         platforms.add(new platform(1400, 800, 400, 50));
         platforms.add(new platform(700, 400, 150, 50));
-
+        coin=new coin(500,700-100,100,100);
         gameView.setPlatforms(platforms);
         character character = new character(150, 80, 0, (height - 150));
         falling = character.getFalling();
@@ -92,6 +94,35 @@ public class Game extends AppCompatActivity {
         character.setjumpVelocity(0);
         Handler mHandler = new Handler();
         jumpFall=new CharacterMovementTask(mHandler,character,gameView,height,platforms);
+        gameView.setCoin(coin);
+        Runnable coinCollision=new Runnable() {
+            @Override
+            public void run() {
+                if(collision.characterCollisionWithCoin(character,coin)){
+                    mHandler.removeCallbacksAndMessages(null);
+                    levelCleared();
+                }else{
+                    mHandler.postDelayed(this,100);
+                }
+            }
+        };
+        mHandler.post(coinCollision);
+        Runnable enemyCollision = new Runnable() {
+            @Override
+            public void run() {
+                if (collision.characterCollisionWithEnemy(character, enemies)) {
+                    // Stop the game
+                    mHandler.removeCallbacksAndMessages(null);  // Clear all callbacks
+                    runGameOverActivity();  // Transition to Game Over screen
+                } else {
+
+                    // Re-post the Runnable to keep checking for collisions
+                    mHandler.postDelayed(this, 100); // adjust delay as needed
+                }
+
+            }
+        };
+        mHandler.post(enemyCollision);
         Runnable rLeft = new Runnable() {
             @Override
             public void run() {
@@ -123,6 +154,7 @@ public class Game extends AppCompatActivity {
             }
         });
 
+
         Runnable rRight = new Runnable() {
             @Override
             public void run() {
@@ -152,6 +184,8 @@ public class Game extends AppCompatActivity {
                 return true;
             }
         });
+
+
 
 
         checkPlatform = new Runnable() {
@@ -262,5 +296,27 @@ public class Game extends AppCompatActivity {
             jumpFall.start();
         }
     }
+    private void runGameOverActivity() {
+        // Run on the UI thread because startActivity is a UI operation
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(Game.this, GameOver.class);
+                startActivity(intent);
+                finish();  // Optionally call finish if you don't want the user to return to this game activity
+            }
+        });
+    }
+    private void levelCleared(){
+        runOnUiThread(new Runnable() {
+            public void run() {
+
+                Intent intent = new Intent(Game.this, levelCleared.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+    }
+
 
 }
