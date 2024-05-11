@@ -3,12 +3,14 @@ package com.example.zakljucna2;
 public class character {
 private float height;
 private float width;
+private boolean onPlatform;
 private float x;
 private float y;
-private float weight=2;
+private float weight=1.1f;
 private float jumpVelocity=0;
-private float jumpStrenght=40;
+private float jumpStrenght=30;
 private boolean falling=true;
+private boolean jumping=false;
 public character(float height,float width,float x,float y){
     this.x=x;
     this.y=y;
@@ -20,6 +22,9 @@ public character(float height,float width,float x,float y){
     public float getHeight() {
         return height;
     }
+    public boolean getJumping(){
+    return jumping;
+    }
 
     public float getjumpStrenght() {
         return jumpStrenght;
@@ -30,6 +35,10 @@ public character(float height,float width,float x,float y){
     }
     public boolean getFalling(){
         return falling;
+
+    }
+    public boolean getPlatform(){
+        return onPlatform;
 
     }
     public float getWeight() {
@@ -60,10 +69,17 @@ public character(float height,float width,float x,float y){
         return jumpVelocity;
 
     }
+    public void setJumping(boolean jumping){
+        this.jumping=jumping;
+    }
     public boolean setFalling(boolean falling){
 
     this.falling=falling;
     return falling;
+    }
+    public boolean setOnPlatform(boolean onPlatform){
+        this.onPlatform=onPlatform;
+        return true;
     }
 
 }

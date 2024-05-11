@@ -25,20 +25,26 @@ import java.util.List;
 
 public class Game extends AppCompatActivity {
     private float height;
+    Runnable checkPlatform;
+    private Thread gameThread;
     private Enemy enemy;
     private Enemy enemy1;
+    private boolean fall;
     private int enemyPosition = 1;
     private float x;
     private float y;
-
+    private int gravity=0;
     private GameView gameView;
+    CharacterMovementTask jumpFall;
     private List<platform> platforms;
-
-    private boolean falling=false;
-    private boolean onPlatform = false;
+    private boolean isScheduled = false;
+    private boolean falling;
+    private boolean jumping;
+    private boolean onPlatform = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         enableFullscreenWithCutout();
         setContentView(R.layout.activity_game);
@@ -65,22 +71,27 @@ public class Game extends AppCompatActivity {
         wm.getDefaultDisplay().getMetrics(metrics);
         height = metrics.heightPixels;
         platforms = new ArrayList<>();
-        platforms.add(new platform(100, 500, 300, 50));  // x, y, width, height
-        platforms.add(new platform(500, 800, 400, 50));
-        platforms.add(new platform(1400, 600, 400, 60));
-        platforms.add(new platform(700, 500, 150, 50));
+        platforms.add(new platform(100, 400, 300, 50));  // x, y, width, height
+        platforms.add(new platform(500, 700, 400, 50));
+        platforms.add(new platform(1100,700,100,50));
+        platforms.add(new platform(1400, 800, 400, 50));
+        platforms.add(new platform(700, 400, 150, 50));
+
         gameView.setPlatforms(platforms);
         character character = new character(150, 80, 0, (height - 150));
         falling = character.getFalling();
         gameView.setCharacter(character);
-        enemy1 = new Enemy(500, 800 - 150, 80, 150, 500, 500 + 400);
+        enemy1 = new Enemy(500, 700 - 150, 80, 150, 500, 500 + 400);
         enemy = new Enemy(920, (height - 150), 80, 150, 900, 1400);
         List<Enemy> enemies = Arrays.asList(enemy, enemy1);
         gameView.setEnemies(enemies);
         gameView.startEnemy();
-
+        jumping=character.getJumping();
+        character.setFalling(false);
+        falling=false;
+        character.setjumpVelocity(0);
         Handler mHandler = new Handler();
-
+        jumpFall=new CharacterMovementTask(mHandler,character,gameView,height,platforms);
         Runnable rLeft = new Runnable() {
             @Override
             public void run() {
@@ -88,6 +99,9 @@ public class Game extends AppCompatActivity {
                 character.setX(x - 15);
                 gameView.invalidate();
                 mHandler.postDelayed(this, 20);
+                if (!character.getFalling() && !collision.platformCollisionBelow(character, platforms)) {
+                    mHandler.post(checkPlatform);
+                }
             }
         };
 
@@ -112,10 +126,12 @@ public class Game extends AppCompatActivity {
         Runnable rRight = new Runnable() {
             @Override
             public void run() {
-                x = character.getX();
-                character.setX(x + 15);
-                gameView.invalidate();
-                mHandler.postDelayed(this, 20);
+                   character.setX(character.getX() + 15);
+                   gameView.invalidate();
+                   mHandler.postDelayed(this, 20);
+                if (!character.getFalling() && !collision.platformCollisionBelow(character, platforms)) {
+                    mHandler.post(checkPlatform);
+                }
             }
         };
 
@@ -137,112 +153,61 @@ public class Game extends AppCompatActivity {
             }
         });
 
-        Runnable rFallCheck = new Runnable() {
+
+        checkPlatform = new Runnable() {
             @Override
             public void run() {
-                // Check if the character should be falling
+                // Check if the character is above a platform
                 if (!collision.platformCollisionBelow(character, platforms) && character.getY() + character.getHeight() < height) {
-                    falling = true;
+                    // If not colliding and not at ground level, start falling
+                    character.setFalling(true);
+                    character.setOnPlatform(false);
+                    updateFalling();  // Handle the falling movement
                 } else {
-                    falling = false;
-                }
-
-                // Update the Y position of the character if falling
-                if (falling) {
-                    float newY = character.getY() + character.getWeight(); // Adjusted falling speed for a smooth fall
-                    if (newY >= height - character.getHeight()) {
-                        // Ground collision
+                    // If there is a platform below or character is at ground level
+                    int index = collision.getIndexAbove(character, platforms);
+                    if (index != -1) {
+                        // Align character on top of the platform
+                        character.setY(platforms.get(index).getY() - character.getHeight());
+                        character.setFalling(false);
+                        character.setOnPlatform(true);
+                    } else if (character.getY() + character.getHeight() >= height) {
+                        // Handle ground collision
                         character.setY(height - character.getHeight());
-                        falling = false;
-                        onPlatform = false;
-                        character.setjumpVelocity(0);
-                    } else if (collision.platformCollisionBelow(character, platforms)) {
-                        // Platform collision from below
-                        int index = collision.getIndexBelow(character, platforms);
-                        if (index != -1) {
-                            character.setY(platforms.get(index).getY() - character.getHeight());
-                            falling = false;
-                            onPlatform = true;
-                            character.setjumpVelocity(0);
-                        }
-                    } else {
-                        // Otherwise, continue falling
-                        character.setY(newY);
+                        character.setFalling(false);
+                        character.setOnPlatform(true);
                     }
-
-                    gameView.invalidate();
                 }
 
-                mHandler.postDelayed(this, 5);
+                // If still falling, continue to check
+                if (character.getFalling()) {
+                    mHandler.postDelayed(this, 20);  // Continue checking every 20 ms
+                }
+            }
+
+            private void updateFalling() {
+                // This method will update the character's vertical position while falling
+                float newY = character.getY() + gravity;
+                character.setY(newY);
+                gameView.invalidate();
             }
         };
 
-        Runnable rJump = new Runnable() {
-            @Override
-            public void run() {
-                if (falling) {
-                    x = character.getX();
-                    y = character.getY();
 
-                    // Update jump velocity and calculate new Y position
-                    character.setjumpVelocity(character.getjumpVelocity() - character.getWeight());
-                    float newY = y - character.getjumpVelocity();
 
-                    if (newY >= height - character.getHeight()) {
-                        // Ground collision
-                        falling = false;
-                        onPlatform = false;
-                        character.setjumpVelocity(0);
-                        character.setY(height - character.getHeight());
-                    } else if (collision.platformCollisionAbove(character, platforms)) {
-                        // Platform collision from above
-                        if (!onPlatform) {
-                            character.setjumpVelocity(0);
-                            falling = true;
-                            onPlatform = true;
-                            int index1 = collision.getIndexAbove(character, platforms);
-                            if (index1 != -1) {
-                                character.setY(platforms.get(index1).getY() - character.getHeight());
-                            }
-                        } else {
-                            character.setY(newY);
-                        }
-                    } else if (collision.platformCollisionBelow(character, platforms)) {
-                        // Platform collision from below
-                        character.setjumpVelocity(0);
-                        int index = collision.getIndexBelow(character, platforms);
-                        if (index != -1) {
-                            character.setY(platforms.get(index).getY() - character.getHeight());
-                        }
-                        falling = false;
-                        onPlatform = true;
-                    } else {
-                        // Otherwise, continue jumping
-                        character.setY(newY);
-                        onPlatform = false;
-                    }
 
-                    gameView.invalidate();
-                    mHandler.postDelayed(this, 5);
-                    Log.d("GG", "Falling: " + falling);
-                    Log.d("EE", "Jump Velocity: " + character.getjumpVelocity());
-                }
-            }
-        };
+
+
 
         space.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!falling) {
-                    falling = true;
-                    onPlatform = false;
-                    character.setjumpVelocity(character.getjumpStrenght());
-                    mHandler.post(rJump);
-                }
+
+                Log.d("JumpDebug", "button clicked.");
+                jump(character,jumpFall);
             }
         });
 
-        mHandler.post(rFallCheck); // Make sure this starts early
 
 
     }
@@ -288,4 +253,14 @@ public class Game extends AppCompatActivity {
         }
         window.setAttributes(layoutParams);
     }
+    public void jump(character character, CharacterMovementTask jumpFall) {
+        if (!character.getFalling() && !fall) {
+            character.setFalling(true);
+            character.setOnPlatform(false);  // Ensure character is no longer considered on a platform
+            character.setjumpVelocity(character.getjumpStrenght());  // Set a strong initial upward velocity
+            gravity = 0;  // Reset gravity so the initial jump is not affected
+            jumpFall.start();
+        }
+    }
+
 }
