@@ -18,6 +18,10 @@ import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -73,9 +77,10 @@ public class Game3 extends AppCompatActivity {
         wm.getDefaultDisplay().getMetrics(metrics);
         height = metrics.heightPixels;
         platforms = new ArrayList<>();
-        platforms.add(new platform(100, 400, 300, 50));  // x, y, width, height
+        platforms.add(new platform(1400, 400, 300, 50));  // x, y, width, height
         platforms.add(new platform(500, 700, 400, 50));
-        coin=new coin(500,700-100,100,100);
+        platforms.add(new platform(800, 500, 400, 50));
+        coin=new coin(1400,400-100,100,100);
         gameView.setPlatforms(platforms);
         character character = new character(150, 80, 0, (height - 150));
         falling = character.getFalling();
@@ -92,8 +97,8 @@ public class Game3 extends AppCompatActivity {
         Handler mHandler = new Handler();
         jumpFall=new CharacterMovementTask(mHandler,character,gameView,height,platforms);
         gameView.setCoin(coin);
-
-
+        writeLevelNumber(3);
+        writePlayerLevel(3);
         checkCoin=new Runnable() {
             @Override
             public void run() {
@@ -324,5 +329,43 @@ public class Game3 extends AppCompatActivity {
         mHandler.removeCallbacks(enemyCollision);
         mHandler.removeCallbacks(checkPlatform);
         mHandler.removeCallbacksAndMessages(null);  // Clear any other callbacks and messages
+    }
+    public void writeLevelNumber(int levelNumber) {
+        // Get the internal storage directory
+        File file = new File(getFilesDir(), "levelNumber.txt");
+
+        try {
+            // Create a new file or overwrite an existing one
+            FileOutputStream fileOutputStream = new FileOutputStream(file, false); // false to overwrite.
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
+            outputStreamWriter.write("Level number: " + levelNumber);
+            outputStreamWriter.close();
+            fileOutputStream.close();
+
+            // Log success
+            Log.d("FileWrite", "Level number written successfully: " + levelNumber);
+        } catch (IOException e) {
+            // Handle exceptions
+            Log.e("FileWrite", "Error writing the level number", e);
+        }
+    }
+    public void writePlayerLevel(int score) {
+        // Get the internal storage directory
+        File file = new File(getFilesDir(), "playerLevel.txt");
+
+        try {
+            // Create a new file or overwrite an existing one
+            FileOutputStream fileOutputStream = new FileOutputStream(file, false); // false to overwrite.
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
+            outputStreamWriter.write("Player score: " + score);
+            outputStreamWriter.close();
+            fileOutputStream.close();
+
+            // Log success
+            Log.d("FileWrite", "Player score written successfully: " + score);
+        } catch (IOException e) {
+            // Handle exceptions
+            Log.e("FileWrite", "Error writing the player score", e);
+        }
     }
 }

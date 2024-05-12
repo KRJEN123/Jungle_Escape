@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -12,6 +13,12 @@ import android.view.WindowInsets;
 import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.ImageView;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class levelCleared extends AppCompatActivity {
 
@@ -35,10 +42,8 @@ public class levelCleared extends AppCompatActivity {
 next.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(levelCleared.this, Game2.class);
-        startActivity(intent);
-        finish();
-
+       int level=readLevelNumber();
+        launchActivityBasedOnLevel(level);
 
 
 
@@ -99,5 +104,50 @@ home.setOnClickListener(new View.OnClickListener() {
             layoutParams.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
         }
         window.setAttributes(layoutParams);
+    }
+    private int readLevelNumber() {
+        File file = new File(getFilesDir(), "playerLevel.txt");
+        if (!file.exists()) {
+            Log.e("FileRead", "File does not exist");
+            return -1; // File does not exist
+        }
+        try {
+            FileInputStream fileInputStream = new FileInputStream(file);
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String line = bufferedReader.readLine(); // Read the first line
+            bufferedReader.close();
+            inputStreamReader.close();
+            fileInputStream.close();
+
+            // Assuming the file contains a simple integer as "Level number: X"
+            return Integer.parseInt(line.split(": ")[1].trim());
+        } catch (IOException e) {
+            Log.e("FileRead", "Error reading the file", e);
+            return -1;
+        } catch (NumberFormatException e) {
+            Log.e("FileRead", "Error parsing the level number", e);
+            return -1;
+        }
+    }
+    private void launchActivityBasedOnLevel(int levelNumber) {
+        Intent intent;
+        switch (levelNumber) {
+            case 1:
+                intent = new Intent(levelCleared.this, Game.class);
+                break;
+            case 2:
+                intent = new Intent(levelCleared.this, Game2.class);
+                break;
+            // Add more cases as needed
+            case 3:
+                intent = new Intent(levelCleared.this, Game3.class);
+                break;
+            default:
+                intent = new Intent(levelCleared.this, MainActivity.class); // Default or error handling
+                break;
+        }
+        startActivity(intent);
+        finish();
     }
 }

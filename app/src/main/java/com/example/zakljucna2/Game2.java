@@ -18,6 +18,10 @@ import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -74,14 +78,14 @@ public class Game2 extends AppCompatActivity {
         wm.getDefaultDisplay().getMetrics(metrics);
         height = metrics.heightPixels;
         platforms = new ArrayList<>();
-        platforms.add(new platform(900, 700, 300, 50));  // x, y, width, height
+        platforms.add(new platform(1100, 700, 300, 50));  // x, y, width, height
         platforms.add(new platform(500, 700, 400, 50));
         coin=new coin(500,700-100,100,100);
         gameView.setPlatforms(platforms);
         character character = new character(150, 80, 0, (height - 150));
         falling = character.getFalling();
         gameView.setCharacter(character);
-        enemy1 = new Enemy(900, 700 - 150, 80, 150, 900, 1100);
+        enemy1 = new Enemy(500, 700 - 150, 80, 150, 500, 700);
         enemy = new Enemy(1100, (height - 150), 80, 150, 1100, 1600);
         List<Enemy> enemies = Arrays.asList(enemy, enemy1);
         gameView.setEnemies(enemies);
@@ -90,10 +94,11 @@ public class Game2 extends AppCompatActivity {
         character.setFalling(false);
         falling=false;
         character.setjumpVelocity(0);
+        writePlayerLevel(3);
         Handler mHandler = new Handler();
         jumpFall=new CharacterMovementTask(mHandler,character,gameView,height,platforms);
         gameView.setCoin(coin);
-
+        writeLevelNumber(2);
 
         checkCoin=new Runnable() {
             @Override
@@ -325,5 +330,43 @@ public class Game2 extends AppCompatActivity {
         mHandler.removeCallbacks(enemyCollision);
         mHandler.removeCallbacks(checkPlatform);
         mHandler.removeCallbacksAndMessages(null);  // Clear any other callbacks and messages
+    }
+    public void writeLevelNumber(int levelNumber) {
+        // Get the internal storage directory
+        File file = new File(getFilesDir(), "levelNumber.txt");
+
+        try {
+            // Create a new file or overwrite an existing one
+            FileOutputStream fileOutputStream = new FileOutputStream(file, false); // false to overwrite.
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
+            outputStreamWriter.write("Level number: " + levelNumber);
+            outputStreamWriter.close();
+            fileOutputStream.close();
+
+            // Log success
+            Log.d("FileWrite", "Level number written successfully: " + levelNumber);
+        } catch (IOException e) {
+            // Handle exceptions
+            Log.e("FileWrite", "Error writing the level number", e);
+        }
+    }
+    public void writePlayerLevel(int score) {
+        // Get the internal storage directory
+        File file = new File(getFilesDir(), "playerLevel.txt");
+
+        try {
+            // Create a new file or overwrite an existing one
+            FileOutputStream fileOutputStream = new FileOutputStream(file, false); // false to overwrite.
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
+            outputStreamWriter.write("Player score: " + score);
+            outputStreamWriter.close();
+            fileOutputStream.close();
+
+            // Log success
+            Log.d("FileWrite", "Player score written successfully: " + score);
+        } catch (IOException e) {
+            // Handle exceptions
+            Log.e("FileWrite", "Error writing the player score", e);
+        }
     }
 }

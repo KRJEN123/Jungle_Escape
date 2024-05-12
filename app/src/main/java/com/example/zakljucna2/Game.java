@@ -23,7 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+import java.io.*;
 public class Game extends AppCompatActivity {
     private Runnable rLeft, rRight, enemyCollision, checkPlatform,checkCoin;
     private float height;
@@ -75,7 +75,8 @@ public class Game extends AppCompatActivity {
         height = metrics.heightPixels;
         platforms = new ArrayList<>();
         platforms.add(new platform(900, 800, 700, 50));  // x, y, width, height
-
+        writeLevelNumber(1);
+        writePlayerLevel(2);
         coin=new coin(1500,800-100,100,100);
         gameView.setPlatforms(platforms);
         character character = new character(150, 80, 0, (height - 150));
@@ -326,6 +327,45 @@ public class Game extends AppCompatActivity {
         mHandler.removeCallbacks(checkPlatform);
         mHandler.removeCallbacksAndMessages(null);  // Clear any other callbacks and messages
     }
+    public void writeLevelNumber(int levelNumber) {
+        // Get the internal storage directory
+        File file = new File(getFilesDir(), "levelNumber.txt");
+
+        try {
+            // Create a new file or overwrite an existing one
+            FileOutputStream fileOutputStream = new FileOutputStream(file, false); // false to overwrite.
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
+            outputStreamWriter.write("Level number: " + levelNumber);
+            outputStreamWriter.close();
+            fileOutputStream.close();
+
+            // Log success
+            Log.d("FileWrite", "Level number written successfully: " + levelNumber);
+        } catch (IOException e) {
+            // Handle exceptions
+            Log.e("FileWrite", "Error writing the level number", e);
+        }
+    }
+    public void writePlayerLevel(int score) {
+        // Get the internal storage directory
+        File file = new File(getFilesDir(), "playerLevel.txt");
+
+        try {
+            // Create a new file or overwrite an existing one
+            FileOutputStream fileOutputStream = new FileOutputStream(file, false); // false to overwrite.
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
+            outputStreamWriter.write("Player score: " + score);
+            outputStreamWriter.close();
+            fileOutputStream.close();
+
+            // Log success
+            Log.d("FileWrite", "Player score written successfully: " + score);
+        } catch (IOException e) {
+            // Handle exceptions
+            Log.e("FileWrite", "Error writing the player score", e);
+        }
+    }
+
 
 
 
