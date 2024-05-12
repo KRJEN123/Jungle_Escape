@@ -19,28 +19,63 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Button Container -->
-    <LinearLayout
+    <!-- GridLayout for Numbers -->
+    <TextView
+        android:id="@+id/textViewOutline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
+        android:text="LEVEL SELECTION:"
+        android:textColor="#151515"
+        android:textSize="50sp"
+        android:fontFamily="@font/font"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+
+
+    <GridLayout
+        android:id="@+id/gridLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="5"
+        android:rowCount="2"
+        android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Sound Button -->
+        <!-- Dynamically add ImageView for each number 1-10 -->
+        <!-- Example for Number 1 -->
         <ImageView
-            android:id="@+id/sound"
+            android:id="@+id/one"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/soundon"
-            android:contentDescription="Sound Button"
-            android:layout_marginBottom="16dp"/>
+            android:src="@drawable/one1"
+            android:contentDescription="Number 1"/>
+
+        <ImageView
+            android:id="@+id/two"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/two2"
+            android:contentDescription="Number 1"/>
 
 
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/three"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/three3"
+            android:contentDescription="Number 1"/>
+
+
+
+        <!-- Repeat for numbers 2-10 -->
+
+    </GridLayout>
 
     <!-- Back Button (Bottom-Left Corner) -->
     <ImageView
@@ -52,5 +87,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

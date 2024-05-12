@@ -36,10 +36,14 @@ public class Sound {
 
     public void setSoundState(boolean soundState) {
         isSoundOn = soundState;
-        if (!isSoundOn && mediaPlayer != null && mediaPlayer.isPlaying()) {
+        this.sound = soundState;  // Update the internal sound state based on the toggle
+        if (isSoundOn) {
+            playMusic();
+        } else {
             pauseMusic();
         }
     }
+
 
     public void releaseMediaPlayer() {
         if (mediaPlayer != null) {

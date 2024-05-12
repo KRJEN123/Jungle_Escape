@@ -1,9 +1,12 @@
 package com.example.zakljucna2;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -13,18 +16,15 @@ import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowInsetsController;
 import android.view.WindowManager;
-import android.widget.Button;
-
-import android.os.Handler;
 import android.widget.ImageView;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Game extends AppCompatActivity {
+public class Game2 extends AppCompatActivity {
+
+
     private Runnable rLeft, rRight, enemyCollision, checkPlatform,checkCoin;
     private float height;
 
@@ -50,7 +50,7 @@ public class Game extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         enableFullscreenWithCutout();
-        setContentView(R.layout.activity_game);
+        setContentView(R.layout.activity_game2);
         gameView = findViewById(R.id.game_view);
         int desiredWidth = 230;
         int desiredHeight = 230;
@@ -74,16 +74,16 @@ public class Game extends AppCompatActivity {
         wm.getDefaultDisplay().getMetrics(metrics);
         height = metrics.heightPixels;
         platforms = new ArrayList<>();
-        platforms.add(new platform(900, 800, 700, 50));  // x, y, width, height
-
-        coin=new coin(1500,800-100,100,100);
+        platforms.add(new platform(900, 700, 300, 50));  // x, y, width, height
+        platforms.add(new platform(500, 700, 400, 50));
+        coin=new coin(500,700-100,100,100);
         gameView.setPlatforms(platforms);
         character character = new character(150, 80, 0, (height - 150));
         falling = character.getFalling();
         gameView.setCharacter(character);
-
-        enemy = new Enemy(1000, 800-150, 80, 150, 1000, 1500);
-        List<Enemy> enemies = Arrays.asList(enemy);
+        enemy1 = new Enemy(900, 700 - 150, 80, 150, 900, 1100);
+        enemy = new Enemy(1100, (height - 150), 80, 150, 1100, 1600);
+        List<Enemy> enemies = Arrays.asList(enemy, enemy1);
         gameView.setEnemies(enemies);
         gameView.startEnemy();
         jumping=character.getJumping();
@@ -108,7 +108,7 @@ public class Game extends AppCompatActivity {
             }
         };
         mHandler.post(checkCoin);
-         enemyCollision = new Runnable() {
+        enemyCollision = new Runnable() {
             @Override
             public void run() {
                 if (collision.characterCollisionWithEnemy(character, enemies)) {
@@ -157,12 +157,12 @@ public class Game extends AppCompatActivity {
         });
 
 
-       rRight = new Runnable() {
+        rRight = new Runnable() {
             @Override
             public void run() {
-                   character.setX(character.getX() + 15);
-                   gameView.invalidate();
-                   mHandler.postDelayed(this, 20);
+                character.setX(character.getX() + 15);
+                gameView.invalidate();
+                mHandler.postDelayed(this, 20);
                 if (!character.getFalling() && !collision.platformCollisionBelow(character, platforms)) {
                     mHandler.post(checkPlatform);
                 }
@@ -303,7 +303,7 @@ public class Game extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(Game.this, GameOver.class);
+                Intent intent = new Intent(Game2.this, GameOver.class);
                 startActivity(intent);
                 finish();  // Optionally call finish if you don't want the user to return to this game activity
             }
@@ -313,7 +313,7 @@ public class Game extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             public void run() {
 
-                Intent intent = new Intent(Game.this, levelCleared.class);
+                Intent intent = new Intent(Game2.this, levelCleared.class);
                 startActivity(intent);
                 finish();
             }
@@ -326,7 +326,4 @@ public class Game extends AppCompatActivity {
         mHandler.removeCallbacks(checkPlatform);
         mHandler.removeCallbacksAndMessages(null);  // Clear any other callbacks and messages
     }
-
-
-
 }

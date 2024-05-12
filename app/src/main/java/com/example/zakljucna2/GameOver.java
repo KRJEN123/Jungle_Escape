@@ -47,7 +47,7 @@ public class GameOver extends AppCompatActivity {
         public void onClick(View v) {
             Intent intent = new Intent(GameOver.this, Game.class);
             startActivity(intent);
-
+            finish();
 
         }
     });
@@ -56,6 +56,7 @@ home.setOnClickListener(new View.OnClickListener() {
     public void onClick(View v) {
         Intent intent = new Intent(GameOver.this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 });
 

@@ -15,10 +15,18 @@
         android:theme="@style/Theme.Zakljucna2"
         tools:targetApi="31">
         <activity
-            android:name=".levelCleared"
+            android:name=".Game3"
             android:exported="true"
             android:screenOrientation="landscape"
             />
+        <activity
+            android:name=".Game2"
+            android:exported="true"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".levelCleared"
+            android:exported="true"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".GameOver"
             android:exported="true"

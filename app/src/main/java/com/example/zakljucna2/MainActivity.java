@@ -2,6 +2,7 @@ package com.example.zakljucna2;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,9 @@ import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.view.WindowInsets;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.*;
+
 public class MainActivity extends AppCompatActivity {
     Sound sound;
 
@@ -25,25 +29,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
        enableFullscreenWithCutout();
-       sound = new Sound(this, R.raw.menumusic);
-
-
 
 
         setContentView(R.layout.activity_main);
         ImageView start=findViewById(R.id.start);
         ImageView options=findViewById(R.id.options);
         ImageView exit=findViewById(R.id.exit);
-
+        ImageView soundOn=findViewById(R.id.soundOn);
         // Set desired width and height in pixels
         int desiredWidth = 500; // in pixels
         int desiredHeight = 150; // in pixels
+        int soundWidth=300;
+        int soundHeight=300;
 
         // Create new LayoutParams and set them
+        ViewGroup.LayoutParams layoutParams3 = soundOn.getLayoutParams();
         ViewGroup.LayoutParams layoutParams2 = exit.getLayoutParams();
         ViewGroup.LayoutParams layoutParams1 = options.getLayoutParams();
         ViewGroup.LayoutParams layoutParams = start.getLayoutParams();
-       layoutParams2.width=desiredWidth;
+       layoutParams3.width=soundWidth;
+       layoutParams3.height=soundHeight;
+        layoutParams2.width=desiredWidth;
        layoutParams2.height=desiredHeight;
         layoutParams1.width=desiredWidth;
        layoutParams1.height=desiredHeight;
@@ -54,21 +60,43 @@ public class MainActivity extends AppCompatActivity {
         start.setLayoutParams(layoutParams);
         options.setLayoutParams(layoutParams1);
         exit.setLayoutParams(layoutParams2);
+        soundOn.setLayoutParams(layoutParams3);
 
+        boolean isSoundOn = loadSoundState();
+        sound = new Sound(this, R.raw.menumusic);
+        sound.setSoundState(isSoundOn);
+        soundOn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Toggle sound state
+                boolean currentSoundState = sound.getSoundState();
+                sound.setSoundState(!currentSoundState);
+
+                // Save the new sound state to the file
+                saveSoundState(sound.getSoundState());
+
+                // Update the image based on the new sound state
+                updateSoundIcon(sound.getSoundState());
+            }
+        });
     start.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(MainActivity.this, Game.class);
             startActivity(intent);
-            sound.pauseMusic();
+            finish();
         }
     });
-    options.setOnClickListener(new View.OnClickListener() {
+
+                // Toggle sound state
+
+
+        options.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             Intent intent=new Intent(MainActivity.this, Options.class);
             startActivity(intent);
-            sound.pauseMusic();
+            finish();
 
         }
     });
@@ -127,4 +155,61 @@ public class MainActivity extends AppCompatActivity {
         }
         window.setAttributes(layoutParams);
     }
+    private boolean loadSoundState() {
+        FileInputStream fis = null;
+        try {
+            fis = openFileInput("sound_state.txt");
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
+            String state = br.readLine();
+            Log.d("SoundState", "Read from file: " + state);  // Add logging to see what's read
+            return Boolean.parseBoolean(state);
+        } catch (FileNotFoundException e) {
+            // If the file doesn't exist, assume sound is on by default
+            Log.d("SoundState", "File not found, defaulting to true");
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return true;
+        } finally {
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void saveSoundState(boolean state) {
+        FileOutputStream fos = null;
+        try {
+            fos = openFileOutput("sound_state.txt", MODE_PRIVATE);
+            fos.write(Boolean.toString(state).getBytes());
+            Log.d("SoundState", "Saved state: " + state);  // Log the saved state
+        } catch (Exception e) {
+            Log.e("SoundState", "Failed to save state", e);
+            e.printStackTrace();
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void updateSoundIcon(boolean isSoundOn) {
+        ImageView soundOn = findViewById(R.id.soundOn);
+        if (isSoundOn) {
+            soundOn.setImageResource(R.drawable.soundon);
+        } else {
+            soundOn.setImageResource(R.drawable.soundoff);
+        }
+    }
+
+
 }

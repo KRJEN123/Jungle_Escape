@@ -24,94 +24,73 @@ public class Options extends AppCompatActivity {
         super.onCreate(savedInstanceState);
        enableFullscreenWithCutout();
         setContentView(R.layout.activity_options);
-        ImageView soundButton = findViewById(R.id.sound);
+        ImageView one=findViewById(R.id.one);
+        ImageView two=findViewById(R.id.two);
+        ImageView three=findViewById(R.id.three);
         ImageView back=findViewById(R.id.back);
         int desiredWidth = 500;
         int desiredHeight = 500;
        int backWidth=250;
        int backHeight=250;
-        sound = new Sound(this, R.raw.menumusic);
-        ViewGroup.LayoutParams layoutParams2 = soundButton.getLayoutParams();
+        ViewGroup.LayoutParams layoutParams4 = three.getLayoutParams();
+        ViewGroup.LayoutParams layoutParams3 = two.getLayoutParams();
+        ViewGroup.LayoutParams layoutParams2 = one.getLayoutParams();
         ViewGroup.LayoutParams layoutParams1 = back.getLayoutParams();
-        layoutParams2.width=desiredWidth;
-        layoutParams2.height=desiredHeight;
+
+        layoutParams4.width=backWidth;
+        layoutParams4.height=backHeight;
+        layoutParams3.width=backWidth;
+        layoutParams3.height=backHeight;
         layoutParams1.width=backWidth;
         layoutParams1.height=backHeight;
-        soundButton.setLayoutParams(layoutParams2);
+        layoutParams2.width=backWidth;
+        layoutParams2.height=backHeight;
         back.setLayoutParams(layoutParams1);
-
+        boolean isSoundOn = loadSoundState();
+       saveSoundState(isSoundOn);
+        one.setLayoutParams(layoutParams2);
+        two.setLayoutParams(layoutParams3);
+        three.setLayoutParams(layoutParams4);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Options.this, MainActivity.class);
                 startActivity(intent);
-
+                finish();
 
             }
         });
-
-        soundButton.setOnClickListener(new View.OnClickListener() {
+        one.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                toggleSoundButton(soundButton);
+                Intent intent = new Intent(Options.this, Game.class);
+                startActivity(intent);
+                finish();
 
 
             }
         });
+two.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent(Options.this, Game2.class);
+        startActivity(intent);
+        finish();
+    }
+});
+three.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent(Options.this, Game3.class);
+        startActivity(intent);
+        finish();
+    }
+});
 
 
     }
-    private void toggleSoundButton(ImageView soundButton) {
-        String filename = "a.txt";
-        if (!fileExists(filename)) {
-            try {
-                writeSoundSetting(filename, "0");  // Create the file with default "off" setting if not found
-            } catch (IOException e) {
-                Log.e("File Write", "Error creating initial file", e);
-            }
-        }
 
-        try {
-            String currentSetting = readSoundSetting(filename);
-            boolean isSoundOn = "1".equals(currentSetting);
-            if (isSoundOn) {
-                soundButton.setImageResource(R.drawable.soundoff);
-                writeSoundSetting(filename, "0");  // Turn off sound
-            } else {
-                soundButton.setImageResource(R.drawable.soundon);
-                writeSoundSetting(filename, "1");  // Turn on sound
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
-    private String readSoundSetting(String filename) throws IOException {
-        if (!fileExists(filename)) {
-            writeSoundSetting(filename, "0"); // Ensure file exists with default setting
-            return "0";
-        }
-
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(openFileInput(filename)))) {
-            return br.readLine();  // Assumes the file contains a single line with "1" or "0"
-        } catch (FileNotFoundException e) {
-            Log.e("Read File", "File not found even after creating", e);
-            return "0";  // Return default if there's an error
-        }
-    }
-    private boolean fileExists(String filename) {
-        File file = new File(getFilesDir(), filename);
-        Log.d("omg","asadad"+file.exists());
-        return file.exists();
-    }
-
-    private void writeSoundSetting(String filename, String setting) throws IOException {
-        try (PrintWriter pw = new PrintWriter(new OutputStreamWriter(openFileOutput(filename, MODE_PRIVATE)))) {
-            pw.print(setting);
-            pw.flush(); // Explicitly flush to ensure all data is written to disk.
-        }
-    }
 
 
 
@@ -159,4 +138,50 @@ public class Options extends AppCompatActivity {
             }
             window.setAttributes(layoutParams);
         }
+    private boolean loadSoundState() {
+        FileInputStream fis = null;
+        try {
+            fis = openFileInput("sound_state.txt");
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
+            String state = br.readLine();
+            Log.d("SoundState", "Read from file: " + state);  // Add logging to see what's read
+            return Boolean.parseBoolean(state);
+        } catch (FileNotFoundException e) {
+            // If the file doesn't exist, assume sound is on by default
+            Log.d("SoundState", "File not found, defaulting to true");
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return true;
+        } finally {
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void saveSoundState(boolean state) {
+        FileOutputStream fos = null;
+        try {
+            fos = openFileOutput("sound_state.txt", MODE_PRIVATE);
+            fos.write(Boolean.toString(state).getBytes());
+            Log.d("SoundState", "Saved state: " + state);  // Log the saved state
+        } catch (Exception e) {
+            Log.e("SoundState", "Failed to save state", e);
+            e.printStackTrace();
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
     }

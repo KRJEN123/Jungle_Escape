@@ -67,5 +67,14 @@
             android:src="@drawable/exit1"/>
 
     </LinearLayout>
+    <ImageView
+        android:id="@+id/soundOn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/soundon"
+        android:contentDescription="sound Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
