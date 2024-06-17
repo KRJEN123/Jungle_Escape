@@ -26,20 +26,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Game3 extends AppCompatActivity {
+public class Game7 extends AppCompatActivity {
 
-    private Runnable rLeft, rRight, enemyCollision, checkPlatform,checkCoin;
+    private Runnable rLeft, rRight, enemyCollision, checkPlatform, checkCoin;
     private float height;
-
-    private Thread gameThread;
     private Timer timerThread;
+    private Thread gameThread;
     private Enemy enemy;
     private Enemy enemy1;
+    private Enemy enemy2;
     private boolean fall;
     private int enemyPosition = 1;
     private float x;
     private float y;
-    private int gravity=0;
+    private int gravity = 0;
     private GameView gameView;
     CharacterMovementTask jumpFall;
     private List<platform> platforms;
@@ -54,7 +54,7 @@ public class Game3 extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         enableFullscreenWithCutout();
-        setContentView(R.layout.activity_game3);
+        setContentView(R.layout.activity_game);
         gameView = findViewById(R.id.game_view);
         int desiredWidth = 230;
         int desiredHeight = 230;
@@ -64,12 +64,12 @@ public class Game3 extends AppCompatActivity {
         ViewGroup.LayoutParams layoutParams2 = left.getLayoutParams();
         ViewGroup.LayoutParams layoutParams = space.getLayoutParams();
         ViewGroup.LayoutParams layoutParams1 = right.getLayoutParams();
-        layoutParams.width=desiredWidth;
-        layoutParams.height=desiredHeight;
-        layoutParams2.width=desiredWidth;
-        layoutParams2.height=desiredHeight;
-        layoutParams1.width=desiredWidth;
-        layoutParams1.height=desiredHeight;
+        layoutParams.width = desiredWidth;
+        layoutParams.height = desiredHeight;
+        layoutParams2.width = desiredWidth;
+        layoutParams2.height = desiredHeight;
+        layoutParams1.width = desiredWidth;
+        layoutParams1.height = desiredHeight;
         left.setLayoutParams(layoutParams2);
         space.setLayoutParams(layoutParams);
         right.setLayoutParams(layoutParams1);
@@ -77,40 +77,44 @@ public class Game3 extends AppCompatActivity {
         DisplayMetrics metrics = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(metrics);
         height = metrics.heightPixels;
-        timerThread = new Timer();
-        timerThread.startTimer();
         platforms = new ArrayList<>();
-        platforms.add(new platform(1400, 400, 300, 50));  // x, y, width, height
-        platforms.add(new platform(500, 700, 400, 50));
-        platforms.add(new platform(800, 500, 400, 50));
-        coin=new coin(1400,400-100,100,100);
+        platforms.add(new platform(500, 800, 600, 50));  // x, y, width, height
+        platforms.add(new platform(500, 500, 500, 50));  // x, y, width, height
+        platforms.add(new platform(1400, 800, 500, 50));  // x, y, width, height
+        platforms.add(new platform(1400, 500, 500, 50));  // x, y, width, height
+        writeLevelNumber(7);
+        writePlayerLevel(8);
+        coin = new coin(1800, 500 - 100, 100, 100);
         gameView.setPlatforms(platforms);
         character character = new character(150, 80, 0, (height - 150));
         falling = character.getFalling();
         gameView.setCharacter(character);
-        enemy1 = new Enemy(500, 700 - 150, 80, 150, 500, 500 + 400);
-        enemy = new Enemy(920, (height - 150), 80, 150, 900, 1400);
-        List<Enemy> enemies = Arrays.asList(enemy, enemy1);
+
+        enemy = new Enemy(500, 800 - 150, 80, 150, 500, 900);
+        enemy1 = new Enemy(500, 500 - 150, 80, 150, 500, 900);
+        enemy2 = new Enemy(1400, 500 - 150, 80, 150, 1500, 1800);
+        List<Enemy> enemies = Arrays.asList(enemy,enemy1,enemy2);
         gameView.setEnemies(enemies);
         gameView.startEnemy();
-        jumping=character.getJumping();
+        jumping = character.getJumping();
         character.setFalling(false);
-        falling=false;
+        falling = false;
         character.setjumpVelocity(0);
         Handler mHandler = new Handler();
-        jumpFall=new CharacterMovementTask(mHandler,character,gameView,height,platforms);
+        jumpFall = new CharacterMovementTask(mHandler, character, gameView, height, platforms);
         gameView.setCoin(coin);
-        writeLevelNumber(3);
-        writePlayerLevel(4);
-        checkCoin=new Runnable() {
+        timerThread = new Timer();
+        timerThread.startTimer();
+
+        checkCoin = new Runnable() {
             @Override
             public void run() {
-                if(collision.characterCollisionWithCoin(character,coin)){
+                if (collision.characterCollisionWithCoin(character, coin)) {
 
                     stopAllRunnables(mHandler);
                     levelCleared();
-                }else{
-                    mHandler.postDelayed(this,100);
+                } else {
+                    mHandler.postDelayed(this, 100);
                 }
             }
         };
@@ -195,8 +199,6 @@ public class Game3 extends AppCompatActivity {
         });
 
 
-
-
         checkPlatform = new Runnable() {
             @Override
             public void run() {
@@ -237,23 +239,18 @@ public class Game3 extends AppCompatActivity {
         };
 
 
-
-
-
-
-
         space.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Log.d("JumpDebug", "button clicked.");
-                jump(character,jumpFall);
+                jump(character, jumpFall);
             }
         });
 
 
-
     }
+
     private void enableFullscreenWithCutout() {
         Window window = getWindow();
 
@@ -296,6 +293,7 @@ public class Game3 extends AppCompatActivity {
         }
         window.setAttributes(layoutParams);
     }
+
     public void jump(character character, CharacterMovementTask jumpFall) {
         if (!character.getFalling() && !fall) {
             character.setFalling(true);
@@ -305,29 +303,32 @@ public class Game3 extends AppCompatActivity {
             jumpFall.start();
         }
     }
+
     private void runGameOverActivity() {
         // Run on the UI thread because startActivity is a UI operation
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(Game3.this, GameOver.class);
+                Intent intent = new Intent(Game7.this, GameOver.class);
                 startActivity(intent);
                 finish();  // Optionally call finish if you don't want the user to return to this game activity
             }
         });
     }
-    private void levelCleared(){
+
+    private void levelCleared() {
         runOnUiThread(new Runnable() {
             public void run() {
                 timerThread.stopTimer();
                 long elapsedTime = timerThread.getElapsedTime();
                 writeElapsedTimeToFile(elapsedTime);
-                Intent intent = new Intent(Game3.this, levelCleared.class);
+                Intent intent = new Intent(Game7.this, levelCleared.class);
                 startActivity(intent);
                 finish();
             }
         });
     }
+
     private void stopAllRunnables(Handler mHandler) {
         mHandler.removeCallbacks(rLeft);
         mHandler.removeCallbacks(rRight);
@@ -335,6 +336,7 @@ public class Game3 extends AppCompatActivity {
         mHandler.removeCallbacks(checkPlatform);
         mHandler.removeCallbacksAndMessages(null);  // Clear any other callbacks and messages
     }
+
     public void writeLevelNumber(int levelNumber) {
         // Get the internal storage directory
         File file = new File(getFilesDir(), "levelNumber.txt");
@@ -354,6 +356,7 @@ public class Game3 extends AppCompatActivity {
             Log.e("FileWrite", "Error writing the level number", e);
         }
     }
+
     public void writePlayerLevel(int score) {
         // Get the internal storage directory
         File file = new File(getFilesDir(), "playerLevel.txt");
@@ -375,7 +378,7 @@ public class Game3 extends AppCompatActivity {
     }
     private void writeElapsedTimeToFile(long elapsedTime) {
         // Get the internal storage directory
-        File file = new File(getFilesDir(), "elapsedTime3.txt");
+        File file = new File(getFilesDir(), "elapsedTime7.txt");
 
         try {
             // Create a new file or overwrite an existing one
@@ -392,5 +395,4 @@ public class Game3 extends AppCompatActivity {
             Log.e("FileWrite", "Error writing the elapsed time", e);
         }
     }
-
 }

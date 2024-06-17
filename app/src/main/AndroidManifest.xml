@@ -15,10 +15,42 @@
         android:theme="@style/Theme.Zakljucna2"
         tools:targetApi="31">
         <activity
-            android:name=".Game3"
+            android:name=".LeaderBoards"
             android:exported="true"
             android:screenOrientation="landscape"
             />
+        <activity
+            android:name=".Game10"
+            android:exported="true"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".Game9"
+            android:exported="true"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".Game8"
+            android:exported="true"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".Game7"
+            android:exported="true"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".Game6"
+            android:exported="true"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".Game5"
+            android:exported="true"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".Game4"
+            android:exported="true"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".Game3"
+            android:exported="true"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".Game2"
             android:exported="true"

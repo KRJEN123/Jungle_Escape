@@ -31,7 +31,7 @@ public class Game2 extends AppCompatActivity {
 
     private Runnable rLeft, rRight, enemyCollision, checkPlatform,checkCoin;
     private float height;
-
+    private Timer timerThread;
     private Thread gameThread;
     private Enemy enemy;
     private Enemy enemy1;
@@ -77,6 +77,8 @@ public class Game2 extends AppCompatActivity {
         DisplayMetrics metrics = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(metrics);
         height = metrics.heightPixels;
+        timerThread = new Timer();
+        timerThread.startTimer();
         platforms = new ArrayList<>();
         platforms.add(new platform(1100, 700, 300, 50));  // x, y, width, height
         platforms.add(new platform(500, 700, 400, 50));
@@ -317,7 +319,9 @@ public class Game2 extends AppCompatActivity {
     private void levelCleared(){
         runOnUiThread(new Runnable() {
             public void run() {
-
+                timerThread.stopTimer();
+                long elapsedTime = timerThread.getElapsedTime();
+                writeElapsedTimeToFile(elapsedTime);
                 Intent intent = new Intent(Game2.this, levelCleared.class);
                 startActivity(intent);
                 finish();
@@ -367,6 +371,25 @@ public class Game2 extends AppCompatActivity {
         } catch (IOException e) {
             // Handle exceptions
             Log.e("FileWrite", "Error writing the player score", e);
+        }
+    }
+    private void writeElapsedTimeToFile(long elapsedTime) {
+        // Get the internal storage directory
+        File file = new File(getFilesDir(), "elapsedTime2.txt");
+
+        try {
+            // Create a new file or overwrite an existing one
+            FileOutputStream fileOutputStream = new FileOutputStream(file, false); // false to overwrite.
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
+            outputStreamWriter.write("Elapsed time: " + elapsedTime + " ms");
+            outputStreamWriter.close();
+            fileOutputStream.close();
+
+            // Log success
+            Log.d("FileWrite", "Elapsed time written successfully: " + elapsedTime + " ms");
+        } catch (IOException e) {
+            // Handle exceptions
+            Log.e("FileWrite", "Error writing the elapsed time", e);
         }
     }
 }

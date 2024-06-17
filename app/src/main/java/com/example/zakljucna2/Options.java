@@ -27,16 +27,46 @@ public class Options extends AppCompatActivity {
         ImageView one=findViewById(R.id.one);
         ImageView two=findViewById(R.id.two);
         ImageView three=findViewById(R.id.three);
+        ImageView four=findViewById(R.id.four);
         ImageView back=findViewById(R.id.back);
+        ImageView five=findViewById(R.id.five);
+        ImageView six=findViewById(R.id.six);
+        ImageView seven=findViewById(R.id.seven);
+        ImageView eight=findViewById(R.id.eight);
+        ImageView nine=findViewById(R.id.nine);
+        ImageView ten=findViewById(R.id.ten);
+        ImageView score=findViewById(R.id.score);
         int desiredWidth = 500;
         int desiredHeight = 500;
        int backWidth=250;
        int backHeight=250;
+
         ViewGroup.LayoutParams layoutParams4 = three.getLayoutParams();
         ViewGroup.LayoutParams layoutParams3 = two.getLayoutParams();
         ViewGroup.LayoutParams layoutParams2 = one.getLayoutParams();
         ViewGroup.LayoutParams layoutParams1 = back.getLayoutParams();
-
+        ViewGroup.LayoutParams layoutParams5 = four.getLayoutParams();
+        ViewGroup.LayoutParams layoutParams6 = five.getLayoutParams();
+        ViewGroup.LayoutParams layoutParams7 = six.getLayoutParams();
+        ViewGroup.LayoutParams layoutParams8 = seven.getLayoutParams();
+        ViewGroup.LayoutParams layoutParams9 = eight.getLayoutParams();
+        ViewGroup.LayoutParams layoutParams10 = nine.getLayoutParams();
+        ViewGroup.LayoutParams layoutParams11 = ten.getLayoutParams();
+        ViewGroup.LayoutParams layoutParams12 = score.getLayoutParams();
+        layoutParams11.width=backWidth;
+        layoutParams11.height=backHeight;
+        layoutParams10.width=backWidth;
+        layoutParams10.height=backHeight;
+        layoutParams9.width=backWidth;
+        layoutParams9.height=backHeight;
+        layoutParams8.width=backWidth;
+        layoutParams8.height=backHeight;
+        layoutParams7.width=backWidth;
+        layoutParams7.height=backHeight;
+        layoutParams6.width=backWidth;
+        layoutParams6.height=backHeight;
+        layoutParams5.width=backWidth;
+        layoutParams5.height=backHeight;
         layoutParams4.width=backWidth;
         layoutParams4.height=backHeight;
         layoutParams3.width=backWidth;
@@ -45,16 +75,35 @@ public class Options extends AppCompatActivity {
         layoutParams1.height=backHeight;
         layoutParams2.width=backWidth;
         layoutParams2.height=backHeight;
+        layoutParams12.height=backHeight;
+        layoutParams12.width=backWidth;
+        score.setLayoutParams(layoutParams12);
         back.setLayoutParams(layoutParams1);
         boolean isSoundOn = loadSoundState();
        saveSoundState(isSoundOn);
         one.setLayoutParams(layoutParams2);
         two.setLayoutParams(layoutParams3);
         three.setLayoutParams(layoutParams4);
+        four.setLayoutParams(layoutParams5);
+        five.setLayoutParams(layoutParams6);
+        six.setLayoutParams(layoutParams7);
+        seven.setLayoutParams(layoutParams8);
+        eight.setLayoutParams(layoutParams9);
+        nine.setLayoutParams(layoutParams10);
+        ten.setLayoutParams(layoutParams11);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Options.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+
+            }
+        });
+        score.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Options.this, LeaderBoards.class);
                 startActivity(intent);
                 finish();
 
@@ -87,8 +136,78 @@ three.setOnClickListener(new View.OnClickListener() {
     }
 });
 
+        four.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Options.this, Game4.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+
+        five.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Options.this, Game5.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        six.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Options.this, Game6.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+
+        seven.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Options.this, Game7.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        eight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Options.this, Game8.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        nine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Options.this, Game9.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        ten.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Options.this, Game10.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
     }
+
+
+
+
+
+
+
+
 
 
 

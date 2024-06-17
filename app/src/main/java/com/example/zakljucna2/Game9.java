@@ -26,15 +26,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Game3 extends AppCompatActivity {
+public class Game9 extends AppCompatActivity {
 
     private Runnable rLeft, rRight, enemyCollision, checkPlatform,checkCoin;
     private float height;
-
-    private Thread gameThread;
     private Timer timerThread;
+    private Thread gameThread;
     private Enemy enemy;
     private Enemy enemy1;
+    private Enemy enemy2;
     private boolean fall;
     private int enemyPosition = 1;
     private float x;
@@ -54,7 +54,7 @@ public class Game3 extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         enableFullscreenWithCutout();
-        setContentView(R.layout.activity_game3);
+        setContentView(R.layout.activity_game);
         gameView = findViewById(R.id.game_view);
         int desiredWidth = 230;
         int desiredHeight = 230;
@@ -77,20 +77,22 @@ public class Game3 extends AppCompatActivity {
         DisplayMetrics metrics = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(metrics);
         height = metrics.heightPixels;
-        timerThread = new Timer();
-        timerThread.startTimer();
         platforms = new ArrayList<>();
-        platforms.add(new platform(1400, 400, 300, 50));  // x, y, width, height
-        platforms.add(new platform(500, 700, 400, 50));
-        platforms.add(new platform(800, 500, 400, 50));
-        coin=new coin(1400,400-100,100,100);
+        platforms.add(new platform(500, 700, 500, 50));  // x, y, width, height
+        platforms.add(new platform(1100, 700, 500, 50));  // x, y, width, height
+        platforms.add(new platform(1500, 700, 500, 50));  // x, y, width, height
+        writeLevelNumber(9);
+        writePlayerLevel(10);
+        coin=new coin(1300,700-100,100,100);
         gameView.setPlatforms(platforms);
         character character = new character(150, 80, 0, (height - 150));
         falling = character.getFalling();
         gameView.setCharacter(character);
-        enemy1 = new Enemy(500, 700 - 150, 80, 150, 500, 500 + 400);
-        enemy = new Enemy(920, (height - 150), 80, 150, 900, 1400);
-        List<Enemy> enemies = Arrays.asList(enemy, enemy1);
+
+        enemy = new Enemy(500, height-150, 80, 150, 500, 1900);
+        enemy1 = new Enemy(500, 700-150, 80, 150, 500, 900);
+        enemy2 = new Enemy(1100, 700-150, 80, 150, 1100, 1600);
+        List<Enemy> enemies = Arrays.asList(enemy,enemy1,enemy2);
         gameView.setEnemies(enemies);
         gameView.startEnemy();
         jumping=character.getJumping();
@@ -100,8 +102,9 @@ public class Game3 extends AppCompatActivity {
         Handler mHandler = new Handler();
         jumpFall=new CharacterMovementTask(mHandler,character,gameView,height,platforms);
         gameView.setCoin(coin);
-        writeLevelNumber(3);
-        writePlayerLevel(4);
+        timerThread = new Timer();
+        timerThread.startTimer();
+
         checkCoin=new Runnable() {
             @Override
             public void run() {
@@ -310,7 +313,7 @@ public class Game3 extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(Game3.this, GameOver.class);
+                Intent intent = new Intent(Game9.this, GameOver.class);
                 startActivity(intent);
                 finish();  // Optionally call finish if you don't want the user to return to this game activity
             }
@@ -322,7 +325,7 @@ public class Game3 extends AppCompatActivity {
                 timerThread.stopTimer();
                 long elapsedTime = timerThread.getElapsedTime();
                 writeElapsedTimeToFile(elapsedTime);
-                Intent intent = new Intent(Game3.this, levelCleared.class);
+                Intent intent = new Intent(Game9.this, levelCleared.class);
                 startActivity(intent);
                 finish();
             }
@@ -375,7 +378,7 @@ public class Game3 extends AppCompatActivity {
     }
     private void writeElapsedTimeToFile(long elapsedTime) {
         // Get the internal storage directory
-        File file = new File(getFilesDir(), "elapsedTime3.txt");
+        File file = new File(getFilesDir(), "elapsedTime9.txt");
 
         try {
             // Create a new file or overwrite an existing one

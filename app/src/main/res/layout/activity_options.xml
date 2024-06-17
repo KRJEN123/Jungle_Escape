@@ -12,14 +12,16 @@
         android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/summer"
         android:scaleType="centerCrop"
-        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/summer"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <!-- GridLayout for Numbers -->
+    <!-- Level Selection Text -->
     <TextView
         android:id="@+id/textViewOutline"
         android:layout_width="wrap_content"
@@ -32,9 +34,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-
-
-
+    <!-- GridLayout for Numbers -->
     <GridLayout
         android:id="@+id/gridLayout"
         android:layout_width="wrap_content"
@@ -42,13 +42,12 @@
         android:columnCount="5"
         android:rowCount="2"
         android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewOutline"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <!-- Dynamically add ImageView for each number 1-10 -->
-        <!-- Example for Number 1 -->
         <ImageView
             android:id="@+id/one"
             android:layout_width="wrap_content"
@@ -61,20 +60,63 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/two2"
-            android:contentDescription="Number 1"/>
-
+            android:contentDescription="Number 2"/>
 
         <ImageView
             android:id="@+id/three"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/three3"
-            android:contentDescription="Number 1"/>
+            android:contentDescription="Number 3"/>
 
+        <ImageView
+            android:id="@+id/four"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/four"
+            android:contentDescription="Number 4"/>
 
+        <ImageView
+            android:id="@+id/five"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/five"
+            android:contentDescription="Number 5"/>
 
-        <!-- Repeat for numbers 2-10 -->
+        <ImageView
+            android:id="@+id/six"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/six"
+            android:contentDescription="Number 6"/>
 
+        <ImageView
+            android:id="@+id/seven"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/seven"
+            android:contentDescription="Number 7"/>
+
+        <ImageView
+            android:id="@+id/eight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/eight"
+            android:contentDescription="Number 8"/>
+
+        <ImageView
+            android:id="@+id/nine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/nine"
+            android:contentDescription="Number 9"/>
+
+        <ImageView
+            android:id="@+id/ten"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ten"
+            android:contentDescription="Number 10"/>
     </GridLayout>
 
     <!-- Back Button (Bottom-Left Corner) -->
@@ -82,9 +124,23 @@
         android:id="@+id/back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/return1"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
         android:contentDescription="Return Button"
+        android:src="@drawable/return1"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Leaderboard ImageView (Bottom-Right Corner) -->
+    <ImageView
+        android:id="@+id/score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="Leaderboard"
+        android:src="@drawable/lolboard"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

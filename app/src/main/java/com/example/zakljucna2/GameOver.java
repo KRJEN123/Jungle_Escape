@@ -143,6 +143,28 @@ home.setOnClickListener(new View.OnClickListener() {
             case 3:
                 intent = new Intent(GameOver.this, Game3.class);
                 break;
+            case 4:
+                intent = new Intent(GameOver.this, Game4.class);
+                break;
+            case 5:
+                intent = new Intent(GameOver.this, Game5.class);
+                break;
+            case 6:
+                intent = new Intent(GameOver.this, Game6.class);
+                break;
+            case 7:
+                intent = new Intent(GameOver.this, Game7.class);
+                break;
+            case 8:
+                intent = new Intent(GameOver.this, Game8.class);
+                break;
+            case 9:
+                intent = new Intent(GameOver.this, Game9.class);
+                break;
+            case 10:
+                intent = new Intent(GameOver.this, Game10.class);
+                break;
+
             default:
                 intent = new Intent(GameOver.this, MainActivity.class); // Default or error handling
                 break;
